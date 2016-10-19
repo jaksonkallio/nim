@@ -55,17 +55,17 @@
 (define nim
   (lambda ()
     (let ((coinflip (random 2)))
-      (display "Welcome to the game of Nim.")
+      ((display "Welcome to the game of Nim.")
        (newline)
        (display "I have a number between 0 and 1. Guess?")
        (let ((chosen-side (prompt "")))
          (if (= coinflip chosen-side)
-             (begin (display "The number is ")
+             ((display "The number is ")
               (display coinflip)
               (display ". The you may go first."))
-             (begin (display "The number is ")
+             ((display "The number is ")
               (display coinflip)
-              (display ". I will go first.")))))))
+              (display ". I will go first."))))))))
 ;; 6.3  Representations and Implementations
 
 ;; Sidebar: Game State ADT Implementation
