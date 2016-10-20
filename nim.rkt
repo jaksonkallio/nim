@@ -15,7 +15,7 @@
           ((equal? player 'human)  
            (play-with-turns (human-move game-state) 'computer))
           ((equal? player 'computer)  
-           (play-with-turns (computer-move game-state simple-strategy) 'human))
+           (play-with-turns (computer-move game-state intelligent-strategy-2-pile) 'human))
           (else  
            (error "player wasn't human or computer:" player)))))
 
@@ -141,6 +141,22 @@
          (if (> (size-of-pile game-state 1) 0) 
              (make-move-instruction 1 1)    ; remove one coin from pile 1
              (make-move-instruction 1 2))))
+
+(define intelligent-strategy-2-pile
+       (lambda (game-state)
+         (cond ((> (size-of-pile game-state 1)
+                   (size-of-pile game-state 2))
+                (make-move-instruction (- (size-of-pile game-state 1)
+                                          (size-of-pile game-state 2))
+                                       1))
+               ((< (size-of-pile game-state 1)
+                   (size-of-pile game-state 2))
+                (make-move-instruction (- (size-of-pile game-state 2)
+                                          (size-of-pile game-state 1))
+                                       2))
+               ((= (size-of-pile game-state 1)
+                   (size-of-pile game-state 2))
+                (simple-strategy game-state)))))
 
 ;; *******************************************************************
 ;; A Move Instruction ADT (Exercise 6.13, pp. 156-7)
