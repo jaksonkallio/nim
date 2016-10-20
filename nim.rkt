@@ -15,19 +15,19 @@
           ((equal? player 'human)  
            (play-with-turns (human-move game-state) 'computer))
           ((equal? player 'computer)  
-           (play-with-turns (computer-move game-state) 'human))
+           (play-with-turns (computer-move game-state simple-strategy) 'human))
           (else  
            (error "player wasn't human or computer:" player)))))
 
 (define computer-move
-  (lambda (game-state)
+  (lambda (game-state strategy)
     (let ((pile (if (> (size-of-pile game-state 1) 0)
                     1
                     2)))
       (display "I take 1 coin from pile ")
       (display pile)
       (newline)
-      (remove-coins-from-pile game-state 1 pile))))
+      (next-game-state game-state (strategy game-state)))))
 
 (define prompt
   (lambda (prompt-string valid? error-string)
@@ -135,6 +135,12 @@
   (lambda (game-state)
     (+ (size-of-pile game-state 1)
        (size-of-pile game-state 2))))
+
+(define simple-strategy
+       (lambda (game-state)
+         (if (> (size-of-pile game-state 1) 0) 
+             (make-move-instruction 1 1)    ; remove one coin from pile 1
+             (make-move-instruction 1 2))))
 
 ;; *******************************************************************
 ;; A Move Instruction ADT (Exercise 6.13, pp. 156-7)
