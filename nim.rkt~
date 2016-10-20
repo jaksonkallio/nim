@@ -30,26 +30,16 @@
       (remove-coins-from-pile game-state 1 pile))))
 
 (define prompt
-  (lambda (prompt-string valid? error-string)
+  (lambda (prompt-string)
     (newline)
     (display prompt-string)
     (newline)
-    (let ((input (read)))
-      (if (valid? input)
-          input
-          (begin (display error-string)
-                 (prompt prompt-string valid? error-string))))))
+    (read)))
 
 (define human-move
   (lambda (game-state)
-    (let ((p (prompt "Which pile will you remove from?"
-                     (lambda (input)
-                       (and (integer? input) (>= input 1) (<= input 2)))
-                     "Bad pile number. Try again.")))
-      (let ((n (prompt "How many coins do you want to remove?"
-                       (lambda (input)
-                         (and (integer? input) (> input 0) (>= (size-of-pile game-state p) input)))
-                       "Bad number of coins. Try again.")))
+    (let ((p (prompt "Which pile will you remove from?")))
+      (let ((n (prompt "How many coins do you want to remove?")))
         (remove-coins-from-pile game-state n p)))))
 
 (define over?
@@ -64,27 +54,18 @@
 
 (define nim
   (lambda ()
-    (let ((coinflip (random 2))
-          (i-val (+ 6 (random 7)))
-          (j-val (+ 6 (random 7))))
-      (if (= i-val j-val)
-          (nim)
-          (begin (display "Welcome to the game of Nim.")
-                 (newline)
-                 (display "I have a number between 0 and 1. Guess?")
-                 (let ((chosen-side (prompt ""
-                                            (lambda (input)
-                                              (and (integer? input) (>= input 0) (<= input 1)))
-                                            "Not a valid flip guess.")))
-                   (if (= coinflip chosen-side)
-                       (begin (display "The number is ")
-                              (display coinflip)
-                              (display ". The you may go first.")
-                              (play-with-turns (make-game-state i-val j-val) 'human))
-                       (begin (display "The number is ")
-                              (display coinflip)
-                              (display ". I will go first.")
-                              (play-with-turns (make-game-state i-val j-val) 'computer)))))))))
+    (let ((coinflip (random 2)))
+      (display "Welcome to the game of Nim.")
+       (newline)
+       (display "I have a number between 0 and 1. Guess?")
+       (let ((chosen-side (prompt "")))
+         (if (= coinflip chosen-side)
+             (begin (display "The number is ")
+              (display coinflip)
+              (display ". The you may go first."))
+             (begin (display "The number is ")
+              (display coinflip)
+              (display ". I will go first.")))))))
 ;; 6.3  Representations and Implementations
 
 ;; Sidebar: Game State ADT Implementation
