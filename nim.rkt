@@ -50,7 +50,7 @@
                        (lambda (input)
                          (and (integer? input) (> input 0) (>= (size-of-pile game-state p) input)))
                        "Bad number of coins. Try again.")))
-        (remove-coins-from-pile game-state n p)))))
+        (next-game-state game-state (cons n p))))))
 
 (define over?
   (lambda (game-state)
@@ -107,6 +107,17 @@
         (make-game-state (size-of-pile game-state 1)
                          (- (size-of-pile game-state 2)
                             num-coins)))))
+
+(define next-game-state
+  (lambda (game-state move-instruction)
+    (cond ((= (pile move-instruction) 1)
+           (make-game-state (- (size-of-pile game-state 1)
+                               (car move-instruction)) 
+                            (size-of-pile game-state 2)))
+          ((= (pile move-instruction) 2)
+           (make-game-state (size-of-pile game-state 1)
+                            (- (size-of-pile game-state 2)
+                               (car move-instruction)))))))
 
 (define display-game-state
   (lambda (game-state)
